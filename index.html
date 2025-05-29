@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seigaku</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-circle"></div>
+                <h1>Seigaku</h1>
+                <span class="subtitle">寂靜中的學習之道</span>
+            </div>
+
+            <nav class="nav">
+                <button class="nav-btn active" data-mode="learn">學習</button>
+                <button class="nav-btn" data-mode="review">複習</button>
+                <button class="nav-btn" data-mode="difficult">困難詞彙</button>
+                <button class="nav-btn" data-mode="stats">進度</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Learning Mode -->
+            <section id="learn-mode" class="mode-section active">
+                <div class="card-container">
+                    <div class="progress-indicator">
+                        <div class="progress-text">
+                            <span id="current-progress">0</span> / <span id="total-words">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="word-card" id="word-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="word-main">
+                                    <h2 id="english-word">Loading...</h2>
+                                    <span class="word-type" id="word-type"></span>
+                                </div>
+                                <div class="hint-text">點擊查看中文解釋</div>
+                            </div>
+                            <div class="card-back">
+                                <div class="chinese-meaning" id="chinese-meaning"></div>
+                                <div class="example-sentence" id="example-sentence"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn difficult-btn" id="mark-difficult">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            標記困難
+                        </button>
+                        <button class="action-btn next-btn" id="next-word">
+                            下一個
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="keyboard-hint">
+                        <span>按空白鍵翻轉 • 按右鍵下一個 • 按D標記困難</span>
+                    </div>
+                </div>
+
+             <!-- Vocabulary List Selector -->
+            <div class="vocab-selector">
+                <div class="current-list-info" id="current-list-info">
+                    <span class="list-icon">📚</span>
+                    <div class="list-details">
+                        <div class="list-name" id="current-list-name">KET 詞彙表</div>
+                        <div class="list-progress" id="current-list-progress">0 / 1400</div>
+                    </div>
+                    <button class="list-selector-btn" id="list-selector-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- List Dropdown -->
+                <div class="list-dropdown" id="list-dropdown">
+                    <div class="list-dropdown-header">
+                        <h3>選擇詞彙表</h3>
+                        <button class="close-dropdown" id="close-dropdown">×</button>
+                    </div>
+                    <div class="list-options" id="list-options">
+                        <!-- Dynamic list options will be populated here -->
+                    </div>
+                </div>
+            </div>
+                
+            </section>
+
+            <!-- Review Mode -->
+            <section id="review-mode" class="mode-section">
+                <div class="review-container">
+                    <h2 class="section-title">複習模式</h2>
+                    <div class="review-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="due-reviews">0</div>
+                            <div class="stat-label">待複習</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="reviewed-today">0</div>
+                            <div class="stat-label">今日已複習</div>
+                        </div>
+                    </div>
+                    <button class="start-review-btn" id="start-review">開始複習</button>
+                </div>
+            </section>
+
+            <!-- Difficult Words Mode -->
+            <section id="difficult-mode" class="mode-section">
+                <div class="difficult-container">
+                    <h2 class="section-title">困難詞彙</h2>
+                    <div class="difficult-list" id="difficult-list">
+                        <!-- Difficult words will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Mode -->
+            <section id="stats-mode" class="mode-section">
+                <div class="stats-container">
+                    <h2 class="section-title">學習進度</h2>
+                    
+                    <!-- All Lists Progress Overview -->
+                    <div class="all-lists-progress" id="all-lists-progress">
+                        <h3>所有詞彙表進度</h3>
+                        <div class="lists-progress-grid" id="lists-progress-grid">
+                            <!-- Dynamic progress cards will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Current List Detailed Stats -->
+                    <div class="current-list-stats">
+                        <h3>當前詞彙表統計</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-icon">📚</div>
+                                <div class="stat-value" id="total-learned">0</div>
+                                <div class="stat-name">已學習</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-value" id="mastered-words">0</div>
+                                <div class="stat-name">已掌握</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">📅</div>
+                                <div class="stat-value" id="streak-days">0</div>
+                                <div class="stat-name">連續天數</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">⏱️</div>
+                                <div class="stat-value" id="study-time">0</div>
+                                <div class="stat-name">學習時間(分)</div>
+                            </div>
+                        </div>
+                        <canvas id="progress-chart" width="600" height="300"></canvas>
+                    </div>
+                </div>
+            </section>
+
+
+        <!-- Settings Button -->
+        <button class="settings-btn" id="settings-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settings-modal">
+            <div class="modal-content">
+                <h3>設定</h3>
+                
+                <!-- Vocabulary List Management -->
+                <div class="settings-section">
+                    <h4>詞彙表管理</h4>
+                    <div class="settings-group">
+                        <label>當前詞彙表</label>
+                        <select id="current-vocab-list">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="settings-group">
+                        <button class="import-export-btn" id="export-progress">匯出進度</button>
+                        <button class="import-export-btn" id="import-progress">匯入進度</button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                
+                <!-- Learning Settings -->
+                <div class="settings-section">
+                    <h4>學習設定</h4>
+                    <div class="settings-group">
+                        <label>每日學習目標</label>
+                        <input type="number" id="daily-goal" min="10" max="100" value="20">
+                    </div>
+                    <div class="settings-group">
+                        <label>自動播放發音</label>
+                        <input type="checkbox" id="auto-pronounce">
+                    </div>
+                    <div class="settings-group">
+                        <label>顯示例句</label>
+                        <input type="checkbox" id="show-examples" checked>
+                    </div>
+                </div>
+                
+                <!-- Data Management -->
+                <div class="settings-section">
+                    <h4>資料管理</h4>
+                    <div class="settings-group">
+                        <button class="reset-btn" id="reset-current-list">重置當前列表進度</button>
+                        <button class="reset-btn danger" id="reset-all-progress">重置所有進度</button>
+                    </div>
+                </div>
+                
+                <button class="close-modal" id="close-settings">關閉</button>
+                <div class="keyboard-hint">
+                    <p>&copy; 2025 Seigaku</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./js/config.js"></script>
+    <script src="./js/spaced-repetition.js"></script>
+    <script src="./js/app.js"></script>
+    <script>
+        // 初始化應用程式
+        const app = new VocabularyApp();
+    </script>
+</body>
+</html> 
