@@ -21,12 +21,19 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Noto Sans TC', sans-serif;
     background: var(--bg-cream);
     color: var(--text-dark);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-y: auto;
     position: relative;
 }
 
@@ -46,10 +53,11 @@ body::before {
 }
 
 .container {
-    min-height: 100vh;
+    min-height: 100%;
+    box-sizing: border-box;
     position: relative;
     z-index: 2;
-    padding-bottom: 80px; /* Add padding to prevent overlap with fixed footer */
+    padding-bottom: 80px;
 }
 
 /* Header with organic shape */
@@ -154,6 +162,60 @@ body::before {
 .vocab-selector {
     position: relative;
     margin-bottom: 1.5rem;
+    /* Default for footer or smaller contexts */
+}
+
+/* Styles for vocab selector in the main learning area */
+#learn-mode .vocab-selector {
+    max-width: 500px; /* Wider on desktop */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem; /* Add some top margin */
+    margin-bottom: 2rem; /* Add some bottom margin */
+}
+
+#learn-mode .current-list-info {
+    max-width: 100%; /* Allow it to fill the new max-width of .vocab-selector */
+    padding: 1.25rem 1.5rem; /* More padding */
+}
+
+#learn-mode .list-icon {
+    font-size: 1.5rem; /* Larger icon */
+}
+
+#learn-mode .list-name {
+    font-size: 1.1rem; /* Larger name */
+}
+
+#learn-mode .list-progress {
+    font-size: 0.9rem; /* Slightly larger progress text */
+}
+
+#learn-mode .list-dropdown {
+    border-radius: 12px 15px 13px 14px; /* Keep existing or adjust if needed */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); /* Enhanced shadow for desktop */
+}
+
+#learn-mode .list-dropdown-header h3 {
+    font-size: 1.2rem; /* Larger header text in dropdown */
+    padding: 0.75rem 1.5rem; /* Adjust padding */
+}
+
+#learn-mode .list-option {
+    padding: 1rem 1.5rem; /* More padding for options */
+    gap: 1rem; /* More gap */
+}
+
+#learn-mode .list-option-icon {
+    font-size: 1.3rem; /* Larger option icon */
+}
+
+#learn-mode .list-option-name {
+    font-size: 1rem; /* Larger option name */
+}
+
+#learn-mode .list-option-info {
+    font-size: 0.85rem; /* Larger option info */
 }
 
 .current-list-info {
@@ -242,8 +304,8 @@ body::before {
     border-radius: 12px 15px 13px 14px;
     box-shadow: 0 8px 24px var(--shadow-soft);
     z-index: 1000;
-    max-height: 400px;
-    overflow-y: auto;
+    max-height: 0;
+    overflow: hidden;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -251,6 +313,8 @@ body::before {
 }
 
 .list-dropdown.active {
+    max-height: 400px;
+    overflow-y: auto;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -267,10 +331,10 @@ body::before {
 }
 
 .list-dropdown-header h3 {
-    font-size: 1.1rem; /* Adjust font size */
+    font-size: 1.1rem;
     color: var(--text-dark);
     margin: 0;
-    padding: 0.5rem 1rem; /* Adjust padding */
+    padding: 0.5rem 1rem;
 }
 
 .close-dropdown {
@@ -644,7 +708,7 @@ body::before {
     padding: 3rem;
     max-width: 1200px;
     margin: 0 auto;
-    margin-bottom: 120px; /* Add space for footer with vocab selector */
+    margin-bottom: 0;
 }
 
 .mode-section {
@@ -671,6 +735,7 @@ body::before {
 .card-container {
     max-width: 600px;
     margin: 0 auto;
+    position: relative;
 }
 
 .progress-indicator {
@@ -726,7 +791,6 @@ body::before {
     text-align: center;
     transition: transform 0.6s ease-in-out;
     transform-style: preserve-3d;
-    /* 確保不會有位移 */
     transform-origin: center center;
 }
 
@@ -751,7 +815,6 @@ body::before {
     padding: 3rem;
     box-shadow: 0 8px 24px var(--shadow-soft);
     overflow: hidden;
-    /* 防止位移的關鍵設定 */
     transform-origin: center center;
     margin: 0;
 }
@@ -1005,45 +1068,48 @@ body::before {
     width: 100%;
     max-width: 100%;
     height: auto;
-    /* 提升Canvas渲染品質 */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
-    /* 防止瀏覽器縮放時出現模糊 */
     image-rendering: pixelated;
     image-rendering: -webkit-crisp-edges;
-    /* 確保在高DPI顯示器上正確顯示 */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    /* 強制GPU加速 */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    /* 改善文字渲染 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Settings Button */
+/* Settings Button - Now positioned relative to card-container */
 .settings-btn {
-    position: fixed;
-    right: 1.5em;
-    width: 56px;
-    height: 56px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
     background: var(--white-soft);
     border: 1px solid var(--border-subtle);
-    border-radius: 50% 48% 52% 50%;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
     box-shadow: 0 4px 12px var(--shadow-soft);
-    color: var(--text-dark);
+    z-index: 500;
+    transition: all 0.3s ease;
+    color: var(--primary-earth);
 }
 
 .settings-btn:hover {
-    transform: rotate(90deg) scale(1.1);
+    transform: rotate(90deg);
     box-shadow: 0 6px 20px var(--shadow-soft);
+    color: var(--primary-earth);
+}
+
+/* Remove styles for .settings-btn-card if they exist */
+.settings-btn-card {
+    /* These styles are no longer needed */
 }
 
 /* Modal */
@@ -1074,8 +1140,8 @@ body::before {
     max-width: 500px;
     text-align: left;
     position: relative;
-    max-height: 80vh; /* Add max-height */
-    overflow-y: auto; /* Add scroll for overflow */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modal-content h3 {
@@ -1167,7 +1233,6 @@ body::before {
     }
     
     .main-content {
-        margin-bottom: 140px; /* More space for mobile footer */
         padding: 1.5rem;
     }
     
@@ -1181,10 +1246,6 @@ body::before {
     
     .stats-grid {
         grid-template-columns: 1fr 1fr;
-    }
-    
-    .settings-btn {
-        bottom: 140px; /* Adjust for mobile footer height */
     }
 }
 
@@ -1214,11 +1275,6 @@ body::before {
     }
     
     .main-content {
-        margin-bottom: 160px; /* Even more space for small mobile footer */
-    }
-    
-    .settings-btn {
-        bottom: 160px;
     }
 }
 
@@ -1235,29 +1291,23 @@ body::before {
 }
 
 .card-inner {
-    /* 強制GPU加速，減少動畫過程中的重繪 */
     will-change: transform;
-    /* 確保在所有瀏覽器中都有相同的行為 */
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
 
 .card-front, .card-back {
-    /* 確保卡片在3D空間中正確定位 */
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
-    /* 防止文字選取影響位置 */
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    /* 確保不會有子像素渲染問題 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* 修復在不同瀏覽器中的3D變換一致性 */
 @supports (transform-style: preserve-3d) {
     .word-card.flipped .card-inner {
         -webkit-transform: rotateY(180deg);
@@ -1272,7 +1322,6 @@ body::before {
     }
 }
 
-/* 為較舊的瀏覽器提供回退方案 */
 @supports not (transform-style: preserve-3d) {
     .word-card .card-inner {
         position: relative;
@@ -1605,11 +1654,11 @@ body::before {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--border-subtle);
-    position: fixed; /* Fix footer to bottom */
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 10; /* Ensure footer is above other content */
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1622,14 +1671,14 @@ body::before {
     font-size: 0.85rem;
 }
 
-/* Footer Vocabulary Selector */
+/* Footer Vocabulary Selector - Keep it compact */
 .footer .vocab-selector {
     position: relative;
-    margin: 0;
+    margin: 0; /* Reset margins for footer context */
 }
 
 .footer .current-list-info {
-    max-width: 250px;
+    max-width: 250px; /* Keep it compact in footer */
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
 }
@@ -1647,10 +1696,12 @@ body::before {
 }
 
 .footer .list-dropdown {
-    bottom: 100%;
+    bottom: 100%; /* Position above the footer button */
     top: auto;
-    transform: translateY(10px);
+    transform: translateY(10px); /* Initial state for animation */
     margin-bottom: 0.5rem;
+    width: 280px; /* Fixed width or max-width for footer dropdown */
+    box-shadow: 0 -8px 24px var(--shadow-soft); /* Shadow for dropdown appearing upwards */
 }
 
 .footer .list-dropdown.active {
